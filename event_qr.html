@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:500px; margin:60px auto; padding:0 20px 60px;">
+    <div class="sy-card" style="text-align:center;">
+
+        <div style="font-size:11px; font-weight:700; letter-spacing:2px;
+                    text-transform:uppercase; color:#1ABC9C; margin-bottom:6px;">
+            Event QR Code
+        </div>
+        <h4 style="font-weight:700; color:#0B3D2E; margin-bottom:4px;">
+            {{ event.title }}
+        </h4>
+        <p style="font-size:13px; color:#888; margin-bottom:24px;">
+            <i class="fas fa-calendar me-1"></i> {{ event.event_date }}
+            &nbsp;·&nbsp;
+            <i class="fas fa-clock me-1"></i> {{ event.event_time }}
+            &nbsp;·&nbsp;
+            <i class="fas fa-map-marker-alt me-1"></i> {{ event.location }}
+        </p>
+
+        <!-- QR Code -->
+        <div style="background:#f0f7f5; border-radius:16px;
+                    padding:24px; display:inline-block; margin-bottom:20px;">
+            <img src="data:image/png;base64,{{ qr_code }}"
+                 alt="QR Code for {{ event.title }}"
+                 style="width:220px; height:220px;">
+        </div>
+
+        <p style="font-size:13px; color:#555; line-height:1.6;
+                  margin-bottom:24px;">
+            Scan this QR code to view event details and
+            submit feedback directly from your phone.
+        </p>
+
+        <!-- Download button -->
+        <a href="data:image/png;base64,{{ qr_code }}"
+           download="SautiYetu_QR_{{ event.title }}.png"
+           style="background:#0B3D2E; color:#fff; border-radius:10px;
+                  padding:12px 28px; text-decoration:none;
+                  font-size:14px; font-weight:600; display:inline-block;
+                  margin-bottom:12px;">
+            <i class="fas fa-download me-2"></i> Download QR Code
+        </a>
+
+        <br>
+        <a href="/events"
+           style="font-size:13px; color:#1ABC9C;
+                  text-decoration:none; font-weight:600;">
+            <i class="fas fa-arrow-left me-1"></i> Back to Events
+        </a>
+    </div>
+</div>
+{% endblock %}
