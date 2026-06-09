@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SautiYetu — Our Voice, Civic Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #F0F7F5; font-family: 'Segoe UI', sans-serif; color: #0B3D2E; }
+
+        /* ── NAVBAR ── */
+        .sy-nav {
+            background: #0B3D2E;
+            padding: 0 40px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(11,61,46,0.4);
+        }
+        .sy-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .sy-logo-icon {
+            width: 42px; height: 42px;
+            background: #1ABC9C;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #0B3D2E;
+            position: relative;
+        }
+        .sy-logo-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #1ABC9C;
+        }
+        .sy-logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .sy-logo-text .sauti { color: #fff; }
+        .sy-logo-text .yetu  { color: #1ABC9C; }
+
+        .sy-nav-links { display: flex; gap: 4px; }
+        .sy-nav-link {
+            color: rgba(255,255,255,0.75);
+            font-size: 13.5px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .sy-nav-link:hover {
+            background: rgba(26,188,156,0.15);
+            color: #1ABC9C;
+        }
+        .sy-nav-btn {
+            background: #1ABC9C;
+            color: #0B3D2E;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 22px;
+            font-size: 13.5px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .sy-nav-btn:hover {
+            background: #17a589;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* ── CARDS ── */
+        .sy-card {
+            background: #fff;
+            border-radius: 20px;
+            border: 0.5px solid rgba(26,188,156,0.2);
+            box-shadow: 0 4px 24px rgba(11,61,46,0.08);
+            padding: 32px;
+        }
+
+        /* ── INPUTS ── */
+        .sy-input, .sy-textarea, .sy-select {
+            width: 100%;
+            border: 1.5px solid rgba(11,61,46,0.15);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            background: #F0F7F5;
+            color: #0B3D2E;
+            transition: all 0.2s;
+        }
+        .sy-input:focus, .sy-textarea:focus, .sy-select:focus {
+            border-color: #1ABC9C;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(26,188,156,0.12);
+        }
+        .sy-textarea { height: 120px; resize: none; }
+
+        /* ── BUTTON ── */
+        .sy-btn-primary {
+            background: #0B3D2E;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+        }
+        .sy-btn-primary:hover {
+            background: #1ABC9C;
+            color: #0B3D2E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26,188,156,0.35);
+        }
+
+        /* ── CHANNEL CARDS ── */
+        .sy-channel-card {
+            flex: 1;
+            border: 1.5px solid rgba(11,61,46,0.15);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12.5px;
+            color: #666;
+            background: #F0F7F5;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .sy-channel-card i { font-size: 22px; color: #1ABC9C; }
+        .sy-channel-card.active {
+            border-color: #1ABC9C;
+            background: #e0f7f4;
+            color: #0B3D2E;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(26,188,156,0.2);
+        }
+        .sy-channel-card:hover {
+            border-color: #1ABC9C;
+            background: #e0f7f4;
+        }
+
+        /* ── BADGES ── */
+        .sy-badge-pos { background:#d1fae5; color:#065f46; border-radius:20px; padding:3px 10px; font-size:11px; font-weight:600; }
+        .sy-badge-neg { background:#fee2e2; color:#991b1b; border-radius:20px; padding:3px 10px; font-size:11px; font-weight:600; }
+        .sy-badge-neu { background:#fef9c3; color:#854d0e; border-radius:20px; padding:3px 10px; font-size:11px; font-weight:600; }
+        .sy-badge-ch  { background:#e0f7f4; color:#0B3D2E; border-radius:20px; padding:3px 10px; font-size:11px; font-weight:600; }
+
+        /* ── SECTION LABEL ── */
+        .sy-section-label {
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #1ABC9C;
+            margin-bottom: 6px;
+        }
+        .sy-divider {
+            height: 2px;
+            background: #1ABC9C;
+            border: none;
+            margin: 6px 0 18px 0;
+            width: 50px;
+            border-radius: 2px;
+        }
+
+        /* ── TABLE ── */
+        .sy-table th {
+            background: #0B3D2E;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 12px 14px;
+        }
+        .sy-table td {
+            font-size: 12px;
+            padding: 11px 14px;
+            vertical-align: middle;
+            border-bottom: 0.5px solid rgba(26,188,156,0.1);
+        }
+        .sy-table tr:hover td { background: #F0F7F5; }
+
+        /* ── ALERTS ── */
+        .sy-alert {
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .sy-alert-success { background:#d1fae5; border:1px solid rgba(26,188,156,0.3); color:#065f46; }
+        .sy-alert-warning { background:#fef9c3; border:1px solid rgba(234,179,8,0.3); color:#854d0e; }
+        .sy-alert-danger  { background:#fee2e2; border:1px solid rgba(220,38,38,0.2); color:#991b1b; }
+        .sy-alert-info    { background:#e0f7f4; border:1px solid rgba(26,188,156,0.2); color:#0B3D2E; }
+
+        /* ── STAT CARD ── */
+        .sy-stat {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            border: 0.5px solid rgba(26,188,156,0.2);
+            box-shadow: 0 2px 12px rgba(11,61,46,0.06);
+            text-align: center;
+        }
+        .sy-stat-val { font-size: 30px; font-weight: 700; color: #1ABC9C; }
+        .sy-stat-label { font-size: 12px; color: #666; margin-top: 4px; }
+
+        /* ── PROGRESS ── */
+        .sy-progress-track {
+            background: #e5f5f1;
+            border-radius: 20px;
+            height: 22px;
+            overflow: hidden;
+        }
+        .sy-progress-fill {
+            background: #1ABC9C;
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        /* ── FOOTER ── */
+        .sy-footer {
+            background: #0B3D2E;
+            padding: 30px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 60px;
+        }
+        .sy-footer-brand { font-size: 20px; font-weight: 700; }
+        .sy-footer-brand .sauti { color: #fff; }
+        .sy-footer-brand .yetu  { color: #1ABC9C; }
+        .sy-footer-tag { font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 3px; }
+        .sy-footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+        .sy-footer-link { color: rgba(255,255,255,0.55); font-size: 13px; text-decoration: none; transition: color 0.2s; }
+        .sy-footer-link:hover { color: #1ABC9C; }
+        .sy-footer-copy { color: rgba(255,255,255,0.35); font-size: 11.5px; }
+    </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="sy-nav">
+    <a href="/" class="sy-logo">
+        <div class="sy-logo-icon">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+        <div class="sy-logo-text">
+            <span class="sauti">Sauti</span><span class="yetu">Yetu</span>
+        </div>
+    </a>
+    <div class="sy-nav-links">
+        <a class="sy-nav-link" href="/">
+            <i class="fas fa-comment-dots"></i> Submit Feedback
+        </a>
+        <a class="sy-nav-link" href="/events">
+            <i class="fas fa-calendar"></i> Events
+        </a>
+        <a class="sy-nav-link" href="/transcribe">
+            <i class="fas fa-microphone"></i> Voice Input
+        </a>
+    </div>
+    <a href="/login" class="sy-nav-btn">
+        <i class="fas fa-lock"></i> Admin Login
+    </a>
+</nav>
+
+<!-- ── FLASH MESSAGES ── -->
+<div style="max-width:680px; margin:16px auto 0; padding:0 20px;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="sy-alert sy-alert-{{ category }}">
+                    <i class="fas fa-info-circle" style="flex-shrink:0; margin-top:2px;"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<!-- ── PAGE CONTENT ── -->
+{% block content %}{% endblock %}
+
+<!-- ── FOOTER ── -->
+<div class="sy-footer">
+    <div>
+        <div class="sy-footer-brand">
+            <span class="sauti">Sauti</span><span class="yetu">Yetu</span>
+        </div>
+        <div class="sy-footer-tag">Our Voice · Civic Platform · Est. 2026</div>
+    </div>
+    <div class="sy-footer-links">
+        <a href="/" class="sy-footer-link">Submit Feedback</a>
+        <a href="/events" class="sy-footer-link">Events</a>
+        <a href="/transcribe" class="sy-footer-link">Voice Input</a>
+        <a href="/login" class="sy-footer-link">Admin</a>
+    </div>
+    <div class="sy-footer-copy">
+        © 2026 SautiYetu · Built by Grace Wekesa · JKUAT
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

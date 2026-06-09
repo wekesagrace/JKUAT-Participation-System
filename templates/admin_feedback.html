@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}All Feedback — SautiYetu Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+  .admin-wrap{display:flex;min-height:calc(100vh - 64px)}
+  .sidebar{width:220px;flex-shrink:0;background:#0d3d25;padding:1.5rem 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
+  .sidebar-user{padding:0 1.2rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:1rem}
+  .sidebar-avatar{width:38px;height:38px;background:#e8a020;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#0d3d25;margin-bottom:8px}
+  .sidebar-name{font-size:13px;font-weight:600;color:#fff}
+  .sidebar-role{font-size:11px;color:rgba(255,255,255,0.5);margin-top:1px}
+  .sidebar-link{display:flex;align-items:center;gap:9px;padding:10px 1.2rem;font-size:13px;font-weight:500;color:rgba(255,255,255,0.6);text-decoration:none;transition:all 0.15s;border-left:2px solid transparent}
+  .sidebar-link i{font-size:17px;flex-shrink:0}
+  .sidebar-link:hover{background:rgba(255,255,255,0.08);color:#fff;border-left-color:rgba(255,255,255,0.3)}
+  .sidebar-link.active{background:rgba(232,160,32,0.12);color:#e8a020;border-left-color:#e8a020}
+  .sidebar-logout{color:rgba(255,100,100,0.7)}
+  .sidebar-logout:hover{background:rgba(255,80,80,0.1);color:#ff8080;border-left-color:#ff8080}
+  .sidebar-divider{border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0.75rem 0}
+  .admin-main{flex:1;padding:2rem;overflow-x:auto}
+  .admin-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+  .admin-title{font-size:24px;font-weight:800;color:#0d3d25;letter-spacing:-0.5px}
+  .admin-sub{font-size:13px;color:#6b8f7a;margin-top:3px}
+
+  .filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem;background:#fff;border-radius:12px;border:1px solid #e8f0eb;padding:1rem}
+  .filter-bar input,.filter-bar select{border:1.5px solid #d4e6db;border-radius:8px;padding:9px 12px;font-size:13px;color:#1a1a1a;background:#fff;outline:none;font-family:inherit;transition:border-color 0.15s}
+  .filter-bar input{flex:1;min-width:180px}
+  .filter-bar input:focus,.filter-bar select:focus{border-color:#0d3d25}
+  .filter-bar .btn-dark{padding:9px 18px;font-size:13px}
+  .clear-btn{padding:9px 16px;border-radius:8px;border:1px solid #d4e6db;background:#fff;color:#6b8f7a;font-size:13px;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;transition:all 0.15s;font-family:inherit}
+  .clear-btn:hover{border-color:#0d3d25;color:#0d3d25}
+
+  .table-card{background:#fff;border-radius:12px;border:1px solid #e8f0eb;overflow:hidden}
+  .data-table{width:100%;border-collapse:collapse;font-size:13px}
+  .data-table th{text-align:left;padding:11px 14px;font-size:11px;font-weight:700;color:#6b8f7a;text-transform:uppercase;letter-spacing:0.5px;background:#f7faf8;border-bottom:1px solid #e8f0eb}
+  .data-table td{padding:11px 14px;border-bottom:1px solid #f0f4f2;color:#2a3a30;vertical-align:top}
+  .data-table tr:last-child td{border-bottom:none}
+  .data-table tr:hover td{background:#f7fdf9}
+  .excerpt{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4a6a56}
+  .empty-row{text-align:center;color:#9bb8a8;padding:2rem!important}
+  .sentiment-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase}
+  .sentiment-positive{background:#dcfce7;color:#16a34a}
+  .sentiment-negative{background:#fee2e2;color:#dc2626}
+  .sentiment-neutral{background:#f3f4f6;color:#6b7280}
+  .channel-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+  .channel-web{background:#eff6ff;color:#1d4ed8}
+  .channel-sms{background:#fef3c7;color:#92400e}
+  .channel-assisted{background:#f5f3ff;color:#5b21b6}
+  @media(max-width:900px){.sidebar{display:none}}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-wrap">
+  <aside class="sidebar">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">A</div>
+      <div class="sidebar-name">Administrator</div>
+      <div class="sidebar-role">Admin Panel</div>
+    </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="sidebar-link"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a>
+    <a href="{{ url_for('admin_feedback') }}" class="sidebar-link active"><i class="ti ti-messages" aria-hidden="true"></i> All Feedback</a>
+    <a href="{{ url_for('export_csv') }}" class="sidebar-link"><i class="ti ti-download" aria-hidden="true"></i> Export CSV</a>
+    <a href="{{ url_for('insights') }}" class="sidebar-link"><i class="ti ti-chart-bar" aria-hidden="true"></i> Public Insights</a>
+    <hr class="sidebar-divider"/>
+    <a href="{{ url_for('admin_logout') }}" class="sidebar-link sidebar-logout"><i class="ti ti-logout" aria-hidden="true"></i> Logout</a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <div class="admin-title">All feedback</div>
+        <div class="admin-sub">{{ feedbacks|length }} submission{{ 's' if feedbacks|length != 1 else '' }} found</div>
+      </div>
+      <a href="{{ url_for('export_csv') }}" class="btn-gold"><i class="ti ti-download" aria-hidden="true"></i> Export CSV</a>
+    </div>
+
+    <form method="GET" class="filter-bar">
+      <input type="text" name="search" value="{{ search }}" placeholder="Search feedback content...">
+      <select name="sentiment">
+        <option value="">All sentiments</option>
+        <option value="Positive" {% if sentiment=='Positive' %}selected{% endif %}>Positive</option>
+        <option value="Negative" {% if sentiment=='Negative' %}selected{% endif %}>Negative</option>
+        <option value="Neutral"  {% if sentiment=='Neutral'  %}selected{% endif %}>Neutral</option>
+      </select>
+      <select name="category">
+        <option value="">All categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat }}" {% if category==cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn-dark"><i class="ti ti-filter" aria-hidden="true"></i> Filter</button>
+      <a href="{{ url_for('admin_feedback') }}" class="clear-btn"><i class="ti ti-x" aria-hidden="true"></i> Clear</a>
+    </form>
+
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Name</th><th>Institution</th><th>Feedback</th>
+            <th>Category</th><th>Channel</th><th>Sentiment</th><th>Score</th><th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for fb in feedbacks %}
+          <tr>
+            <td>{{ fb.id }}</td>
+            <td>{{ fb.name or 'Anonymous' }}</td>
+            <td>{{ fb.institution or '—' }}</td>
+            <td class="excerpt" title="{{ fb.content }}">{{ fb.content[:60] }}{% if fb.content|length > 60 %}…{% endif %}</td>
+            <td>{{ fb.category or '—' }}</td>
+            <td><span class="channel-badge channel-{{ fb.channel }}">{{ fb.channel }}</span></td>
+            <td><span class="sentiment-badge sentiment-{{ fb.sentiment_label|lower if fb.sentiment_label else 'neutral' }}">{{ fb.sentiment_label or 'N/A' }}</span></td>
+            <td>{{ fb.sentiment_score }}</td>
+            <td>{{ fb.timestamp.strftime('%d %b %Y') }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="9" class="empty-row">No feedback matches your filters.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}

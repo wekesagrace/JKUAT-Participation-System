@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold">
+                    <i class="fas fa-calendar-plus me-2" style="color:#006633"></i>
+                    Post New Event
+                </h3>
+                <a href="/events" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Events
+                </a>
+            </div>
+
+            <!-- Add Event Form -->
+            <div class="card">
+                <div class="card-body p-4">
+                    <form method="POST" action="/events/add">
+
+                        <!-- Event Title -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-heading me-1"></i> Event Title <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="title" class="form-control"
+                                   placeholder="e.g. Public Participation Meeting — Academic Policy Review"
+                                   required>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-align-left me-1"></i> Description <span class="text-danger">*</span>
+                            </label>
+                            <textarea name="description" class="form-control" rows="4"
+                                      placeholder="Describe the event, its purpose, and who should attend..."
+                                      required></textarea>
+                        </div>
+
+                        <!-- Date and Time -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-calendar me-1"></i> Date <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" name="event_date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-clock me-1"></i> Time <span class="text-danger">*</span>
+                                </label>
+                                <input type="time" name="event_time" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-location-dot me-1"></i> Venue / Location <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="location" class="form-control"
+                                   placeholder="e.g. JKUAT Main Hall, Block C Room 101"
+                                   required>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-tag me-1"></i> Category
+                            </label>
+                            <select name="category" class="form-select">
+                                <option value="Meeting">Meeting</option>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Notice">Notice</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-grow-1">
+                                <i class="fas fa-paper-plane me-2"></i>Post Event
+                            </button>
+                            <a href="/dashboard" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

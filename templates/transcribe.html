@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:620px;margin:40px auto;padding:0 20px 60px;">
+<div style="background:#fff;border-radius:20px;padding:32px;border:0.5px solid rgba(26,188,156,0.2);box-shadow:0 4px 24px rgba(11,61,46,0.08);">
+    <div style="text-align:center;margin-bottom:24px;">
+    <div style="width:64px;height:64px;background:#e0f7f4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <i class="fas fa-microphone" style="font-size:26px;color:#1ABC9C;"></i>
+            </div>
+            <h4 style="font-weight:700;color:#0B3D2E;margin-bottom:6px;">Audio Transcription</h4>
+                <p style="font-size:13px;color:#888;line-height:1.6;">Upload an audio file and the system will automatically convert your speech to text using AI.</p>
+                    </div>
+                    <form method="POST" action="/transcribe" enctype="multipart/form-data">
+                    <div style="margin-bottom:18px;">
+                    <label style="font-size:12.5px;font-weight:600;color:#0B3D2E;display:block;margin-bottom:7px;">
+                        <i class="fas fa-file-audio me-1" style="color:#1ABC9C;"></i> Upload Audio File <span style="color:#dc2626;">*</span>
+                            </label>
+                            <input type="file" name="audio" accept=".mp3,.wav,.m4a,.ogg,.flac,.mp4" required
+                            style="width:100%;border:1.5px solid rgba(11,61,46,0.15);border-radius:10px;padding:11px 14px;font-size:13px;background:#F0F7F5;color:#0B3D2E;box-sizing:border-box;">
+                                <div style="font-size:11px;color:#aaa;margin-top:5px;">Supported: MP3, WAV, M4A, OGG, FLAC. Maximum 25MB.</div>
+                                    </div>
+                                    <div style="margin-bottom:22px;">
+                                    <label style="font-size:12.5px;font-weight:600;color:#0B3D2E;display:block;margin-bottom:7px;">
+                                        <i class="fas fa-language me-1" style="color:#1ABC9C;"></i> Language
+                                            </label>
+                                            <select name="language" style="width:100%;border:1.5px solid rgba(11,61,46,0.15);border-radius:10px;padding:11px 14px;font-size:13px;background:#F0F7F5;color:#0B3D2E;box-sizing:border-box;">
+                                                <option value="auto">Auto Detect</option>
+                                                <option value="en">English</option>
+                                                <option value="sw">Swahili</option>
+                                                <option value="fr">French</option>
+                                                </select>
+                                                </div>
+                                                <button type="submit" id="submitBtn" onclick="showLoading()"
+                                                style="background:#0B3D2E;color:#fff;border:none;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:700;cursor:pointer;width:100%;transition:all 0.2s;">
+                                                    <i class="fas fa-wand-magic-sparkles me-2"></i> Transcribe Audio
+                                                    </button>
+                                                    </form>
+                                                    <div id="loadingMsg" style="display:none;background:#e0f7f4;border:1px solid rgba(26,188,156,0.3);border-radius:10px;padding:14px;text-align:center;margin-top:16px;">
+                                                        <i class="fas fa-spinner fa-spin me-2" style="color:#1ABC9C;"></i>
+                                                            <span style="color:#0B3D2E;font-weight:600;">Processing your audio... This may take 1-3 minutes. Please wait.</span>
+                                                                </div>
+                                                                {% if transcription %}
+                                                                <div style="margin-top:24px;padding-top:24px;border-top:0.5px solid rgba(26,188,156,0.15);">
+                                                                <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1ABC9C;margin-bottom:8px;">Transcription Result</div>
+                                                                    <div style="background:#F0F7F5;border-radius:12px;padding:16px;font-size:14px;color:#0B3D2E;line-height:1.7;margin-bottom:16px;border-left:4px solid #1ABC9C;">
+                                                                        {{ transcription }}
+                                                                        </div>
+                                                                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                                                                        <button onclick="copyText()" style="background:#0B3D2E;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
+                                                                            <i class="fas fa-copy"></i> Copy Text
+                                                                            </button>
+                                                                            <a href="/feedback?prefill={{ transcription | urlencode }}"
+                                                                            style="background:#1ABC9C;color:#0B3D2E;border-radius:8px;padding:9px 18px;text-decoration:none;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;">
+                                                                                <i class="fas fa-paper-plane"></i> Use as Feedback
+                                                                                </a>
+                                                                                </div>
+                                                                                </div>
+                                                                                {% endif %}
+                                                                                </div>
+                                                                                <div style="display:flex;align-items:center;gap:12px;margin-top:16px;padding:14px 18px;background:#fff;border-radius:12px;border:0.5px solid rgba(26,188,156,0.2);">
+                                                                                    <i class="fas fa-lightbulb" style="color:#1ABC9C;font-size:18px;flex-shrink:0;"></i>
+                                                                                        <span style="font-size:12.5px;color:#555;line-height:1.6;">
+                                                                                            <strong style="color:#0B3D2E;">Tip:</strong> After transcription click <strong>Use as Feedback</strong> to automatically fill the feedback form with your spoken words.
+                                                                                                </span>
+                                                                                                </div>
+                                                                                                </div>
+                                                                                                <script>
+                                                                                                function showLoading() {
+                                                                                                    setTimeout(() => {
+                                                                                                            document.getElementById('loadingMsg').style.display = 'block';
+                                                                                                                    document.getElementById('submitBtn').disabled = true;
+                                                                                                                            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
+                                                                                                                                }, 100);
+                                                                                                                                }
+                                                                                                                                function copyText() {
+                                                                                                                                    const text = `{{ transcription }}`;
+                                                                                                                                        navigator.clipboard.writeText(text).then(() => {
+                                                                                                                                                alert('Copied to clipboard!');
+                                                                                                                                                    });
+                                                                                                                                                    }
+                                                                                                                                                    </script>
+                                                                                                                                                    {% endblock %}
